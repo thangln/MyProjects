@@ -212,6 +212,32 @@ BAI 2
    300 | 0</tt>
 </div>
 
+<div>
+<b>SOLUTION 1</b><br>
+SELECT b.id,
+       COUNT(p.id) AS passengers_on_board
+  FROM buses b
+  LEFT JOIN passengers p
+    ON b.origin = p.origin
+   AND b.destination = p.destination
+   AND b.time >= p.time
+GROUP BY b.id
+ORDER BY b.id;
+</div>
+
+<div>
+<b>SOLUTION 2</b><br>
+SELECT b.id,
+       (SELECT COUNT(*)
+          FROM passengers p
+         WHERE b.origin = p.origin
+           AND b.destination = p.destination
+           AND b.time >= p.time
+       ) AS passengers_on_board
+  FROM buses b
+ORDER BY b.id;
+</div>
+
 BAI 3
 <div class="brinza-task-description">
 <p>You would like to find the sentence containing the largest number of words in some given text. The text is specified as a string S consisting of N characters: letters, spaces, dots (<tt style="white-space: pre-wrap;">.</tt>), question marks (<tt style="white-space: pre-wrap;">?</tt>) and exclamation marks (<tt style="white-space: pre-wrap;">!</tt>).</p>
