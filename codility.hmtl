@@ -1,0 +1,230 @@
+https://app.codility.com/c/run/GQJFW9-X2M/
+
+<div>BAI 1</div>
+
+<div class="brinza-task-description">
+<p>You are given two tables describing theater plays and reservations for these plays in specific theaters.</p>
+<tt style="white-space: pre-wrap;">  create table plays (
+      id integer not null,
+      title varchar(40) not null,
+      writer varchar(40) not null,
+      unique(id)
+  );
+
+  create table reservations (
+      id integer not null,
+      play_id integer not null,
+      number_of_tickets integer not null,
+      theater varchar(40) not null,
+      unique(id)
+  );</tt>
+<p>Write an SQL query that counts the total number of tickets reserved for each play. The table of results should contain three columns: <tt style="white-space: pre-wrap;">id</tt> (id of play), <tt style="white-space: pre-wrap;">title</tt> (title of play) and <tt style="white-space: pre-wrap;">reserved_tickets</tt> (total number of reserved tickets for play). Rows should be ordered by decreasing <tt style="white-space: pre-wrap;">reserved_tickets</tt>. In the case of a tie, rows should be sorted by increasing id of play.</p>
+<p><b>Examples:</b></p>
+<p>1. Given:</p>
+<tt style="white-space: pre-wrap;">  plays:
+
+    id | title                          | writer
+  -----+--------------------------------+----------------
+   109 | Queens and Kings of Madagascar | Paul Sat
+   123 | Merlin                         | Lee Roy
+   142 | Key of the tea                 | Max Rogers
+   144 | ROMEance Comedy                | Bohring Ashell
+   145 | Nameless.                      | Note Nul
+
+
+  reservations:
+
+   id | play_id | number_of_tickets | theater
+  ----+---------+-------------------+---------------------
+   13 | 109     | 12                | Mc Rayleigh Theater
+   24 | 109     | 34                | Mc Rayleigh Theater
+   37 | 145     | 84                | Mc Rayleigh Theater
+   49 | 145     | 45                | Mc Rayleigh Theater
+   51 | 145     | 41                | Mc Rayleigh Theater
+   68 | 123     | 3                 | Mc Rayleigh Theater
+   83 | 142     | 46                | Mc Rayleigh Theater
+</tt>
+<p>your query should return:</p>
+<tt style="white-space: pre-wrap;">    id | title                          | reserved_tickets
+  -----+--------------------------------+------------------
+   145 | Nameless.                      | 170 
+   109 | Queens and Kings of Madagascar | 46 
+   142 | Key of the tea                 | 46 
+   123 | Merlin                         | 3 
+   144 | ROMEance Comedy                | 0 </tt>
+<p>2. Given:</p>
+<tt style="white-space: pre-wrap;">  plays:
+
+   id | title                    | writer
+  ----+--------------------------+---------------
+   34 | The opera of the phantom | Lero Gastonx
+   35 | The legend of the cake   | Oscar Glad
+   36 | Stone swords             | Arthur King
+
+
+  reservations:
+
+   id | play_id | number_of_tickets | theater
+  ----+---------+-------------------+------------------------------
+   10 | 36      | 13                | Arthur King Theater
+   30 | 35      | 20                | The Legend Theater
+   31 | 36      | 21                | The Legend Theater
+   32 | 35      | 23                | The Legend Theater
+   33 | 36      | 19                | The Legend Theater
+   40 | 34      | 29                | The Jupiter Assembly Theater
+   41 | 34      | 19                | The Jupiter Assembly Theater
+   42 | 34      | 6                 | The Jupiter Assembly Theater</tt>
+<p>your query should return:</p>
+<tt style="white-space: pre-wrap;">   id | title                    | reserved_tickets
+  ----+--------------------------+------------------
+   34 | The opera of the phantom | 54 
+   36 | Stone swords             | 53 
+   35 | The legend of the cake   | 43 </tt>
+</div>
+<div>ANSWER: https://www.mycompiler.io/view/5pDiHpq
+</div>
+<div>
+create table plays (
+      id integer not null,
+      title varchar(40) not null,
+      writer varchar(40) not null,
+      unique(id)
+  );
+
+  create table reservations (
+      id integer not null,
+      play_id integer not null,
+      number_of_tickets integer not null,
+      theater varchar(40) not null,
+      unique(id)
+  );
+  
+insert into plays values (109, 'Queens and Kings of Madagascar', 'Paul Sat');
+insert into plays values (123, 'Merlin', 'Lee Roy');
+insert into plays values (142, 'Key of the tea', 'Max Rogers');
+insert into plays values (144, 'ROMEance Comedy', 'Bohring Ashell');
+insert into plays values (145, 'Nameless.', 'Note Nul');
+insert into reservations values (13, 109, 12, 'Mc Rayleigh Theater');
+insert into reservations values (24, 109, 34, 'Mc Rayleigh Theater');
+insert into reservations values (37, 145, 84, 'Mc Rayleigh Theater');
+insert into reservations values (49, 145, 45, 'Mc Rayleigh Theater');
+insert into reservations values (51, 145, 41, 'Mc Rayleigh Theater');
+insert into reservations values (68, 123, 3, 'Mc Rayleigh Theater');
+insert into reservations values (83, 142, 46, 'Mc Rayleigh Theater');
+
+
+-- Select plays.id, plays.title, coalesce(sum(reservations.number_of_tickets),0) 
+-- from plays left join reservations on plays.id = reservations.play_id 
+-- group by plays.id
+-- order BY number_of_tickets desc;
+
+Select plays.id as "id" , plays.title as "titulo", coalesce(sum(reservations.number_of_tickets),0) as "total"
+from plays left join reservations on plays.id = reservations.play_id 
+group by plays.id
+order by number_of_tickets desc;
+
+-- Select plays.id, plays.title, coalesce(sum(reservations.number_of_tickets),0) 
+-- from plays inner join reservations on plays.id = reservations.play_id 
+-- group by plays.id;
+-- order desc number_of_tickets;
+</div>
+
+BAI 2
+<div class="brinza-task-description">
+<p>You are given two tables, <tt style="white-space: pre-wrap;">buses</tt> and <tt style="white-space: pre-wrap;">passengers</tt>, with the following structure:</p>
+<tt style="white-space: pre-wrap;">  create table buses (
+      id integer primary key,
+      origin varchar not null,
+      destination varchar not null,
+      time varchar not null,
+      unique (origin, destination, time)
+  );
+
+  create table passengers (
+      id integer primary key,
+      origin varchar not null,
+      destination varchar not null,
+      time varchar not null
+  );</tt>
+<p>Each row of table <tt style="white-space: pre-wrap;">buses</tt> contains information about a single bus's origin (<tt style="white-space: pre-wrap;">origin</tt>), destination (<tt style="white-space: pre-wrap;">destination</tt>) and time of departure (<tt style="white-space: pre-wrap;">time</tt>). Each row of table <tt style="white-space: pre-wrap;">passengers</tt> describes a single passenger and contains information about the station they're traveling from (<tt style="white-space: pre-wrap;">origin</tt>), the station they're traveling to (<tt style="white-space: pre-wrap;">destination</tt>) and the time they will arrive at the departure station (<tt style="white-space: pre-wrap;">time</tt>). Passengers will board the earliest possible bus that travels <b><b>directly</b></b> to their desired destination. Passengers can still board a bus if it departs in the same minute that they arrive at the station. All passengers who are still at the station at 23:59 and don't board any of the 23:59 buses will leave the platform without boarding any bus.</p>
+<p>You can assume that no two buses with the same origin and destination depart at the same time.</p>
+<p>Write an SQL query that, for each bus, returns the number of passengers boarding it. For each bus you should provide its id (<tt style="white-space: pre-wrap;">id</tt>) and the number of passengers on board (<tt style="white-space: pre-wrap;">passengers_on_board</tt>). Rows should be ordered by the <tt style="white-space: pre-wrap;">id</tt> column (in ascending order).</p>
+<p>Time is represented as a string in the format <tt style="white-space: pre-wrap;">HH:MM</tt>.</p>
+<p><b>Examples:</b></p>
+<p>1. Given tables:</p>
+<tt style="white-space: pre-wrap;">  buses:
+
+   id | origin | destination | time
+  ----+--------+-------------+-------
+   10 | Warsaw | Berlin      | 10:55
+   20 | Berlin | Paris       | 06:20
+   21 | Berlin | Paris       | 14:00
+   22 | Berlin | Paris       | 21:40
+   30 | Paris  | Madrid      | 13:30
+
+  passengers:
+
+   id | origin     | destination  | time
+  ----+------------+--------------+-------
+   1  | Paris      | Madrid       | 13:30
+   2  | Paris      | Madrid       | 13:31
+   10 | Warsaw     | Paris        | 10:00
+   11 | Warsaw     | Berlin       | 22:31
+   40 | Berlin     | Paris        | 06:15
+   41 | Berlin     | Paris        | 06:50
+   42 | Berlin     | Paris        | 07:12
+   43 | Berlin     | Paris        | 12:03
+   44 | Berlin     | Paris        | 20:00
+
+</tt>
+<p>your query should return:</p>
+<tt style="white-space: pre-wrap;">   id | passengers_on_board
+  ----+---------------------
+   10 | 0
+   20 | 1
+   21 | 3
+   22 | 1
+   30 | 1</tt>
+<p>2. Given tables:</p>
+<tt style="white-space: pre-wrap;">  buses:
+
+    id | origin | destination | time
+  -----+--------+-------------+-------
+   100 | Munich | Rome        | 13:00
+   200 | Munich | Rome        | 15:30
+   300 | Munich | Rome        | 20:00
+
+  passengers:
+
+   id | origin | destination | time
+  ----+--------+-------------+-------
+    1 | Munich | Rome        | 10:01
+    2 | Munich | Rome        | 11:30
+    3 | Munich | Rome        | 11:30
+    4 | Munich | Rome        | 12:03
+    5 | Munich | Rome        | 13:00
+</tt>
+<p>your query should return:</p>
+<tt style="white-space: pre-wrap;">    id | passengers_on_board
+  -----+---------------------
+   100 | 5
+   200 | 0
+   300 | 0</tt>
+</div>
+
+BAI 3
+<div class="brinza-task-description">
+<p>You would like to find the sentence containing the largest number of words in some given text. The text is specified as a string S consisting of N characters: letters, spaces, dots (<tt style="white-space: pre-wrap;">.</tt>), question marks (<tt style="white-space: pre-wrap;">?</tt>) and exclamation marks (<tt style="white-space: pre-wrap;">!</tt>).</p>
+<p>The text can be divided into sentences by splitting it at dots, question marks and exclamation marks. A sentence can be divided into words by splitting it at spaces. A sentence without words is valid, but a valid word must contain at least one letter.</p>
+<p>For example, given S = "<tt style="white-space: pre-wrap;">We test coders. Give us a try?</tt>", there are three sentences: "<tt style="white-space: pre-wrap;">We test coders</tt>", "<tt style="white-space: pre-wrap;"> Give us a try</tt>" and "<tt style="white-space: pre-wrap;"></tt>". The first sentence contains three words: "<tt style="white-space: pre-wrap;">We</tt>", "<tt style="white-space: pre-wrap;">test</tt>" and "<tt style="white-space: pre-wrap;">coders</tt>". The second sentence contains four words: "<tt style="white-space: pre-wrap;">Give</tt>", "<tt style="white-space: pre-wrap;">us</tt>", "<tt style="white-space: pre-wrap;">a</tt>" and "<tt style="white-space: pre-wrap;">try</tt>". The third sentence is empty.</p>
+<p>Write a function:</p>
+<blockquote><p style="font-family: monospace; font-size: 9pt; display: block; white-space: pre-wrap;"><tt>def solution(S)</tt></p></blockquote>
+<p>that, given a string S consisting of N characters, returns the maximum number of words in a sentence.</p>
+<p>For example, given S = "<tt style="white-space: pre-wrap;">We test coders. Give us a try?</tt>", the function should return 4, as explained above.</p>
+<p>Given S = "<tt style="white-space: pre-wrap;">Forget  CVs..Save time . x x</tt>", the function should return 2, as there are four sentences: "<tt style="white-space: pre-wrap;">Forget  CVs</tt>" (2 words), "<tt style="white-space: pre-wrap;"></tt>" (0 words), "<tt style="white-space: pre-wrap;">Save time </tt>" (2 words) and "<tt style="white-space: pre-wrap;"> x x</tt>" (2 words).</p>
+<p>Assume that:</p>
+<blockquote><ul style="margin: 10px; padding: 0px;"><li>the length of string S is within the range [<span class="number">1</span>..<span class="number">100</span>];</li>
+<li>string S consists only of letters (<tt style="white-space: pre-wrap;">a</tt>−<tt style="white-space: pre-wrap;">z</tt>, <tt style="white-space: pre-wrap;">A</tt>−<tt style="white-space: pre-wrap;">Z</tt>), spaces, dots (<tt style="white-space: pre-wrap;">.</tt>), question marks (<tt style="white-space: pre-wrap;">?</tt>) and exclamation marks (<tt style="white-space: pre-wrap;">!</tt>).</li>
+</ul>
+</blockquote><p>In your solution, focus on <b><b>correctness</b></b>. The performance of your solution will not be the focus of the assessment.</p>
+</div>
